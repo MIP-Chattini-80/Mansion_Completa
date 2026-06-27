@@ -40,6 +40,21 @@ public class ObjetosController {
     @Autowired
     private ObjetosModelAssembler assembler;
 
+    @GetMapping(produces = MediaTypes.HAL_JSON_VALUE)
+    public ResponseEntity<CollectionModel<EntityModel<ObjetosDTO>>> listarTodo() {
+        List<EntityModel<ObjetosDTO>> Objetos = objetosService.listarTodo().stream()
+                .map(assembler::toModel)
+                .collect(Collectors.toList());
+
+        if (Objetos.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(CollectionModel.of(
+                Objetos,
+                linkTo(methodOn(ObjetosController.class).listarTodo()).withSelfRel()));
+    }
+
     @GetMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
     public ResponseEntity<EntityModel<ObjetosDTO>> obtenerPorId(@PathVariable Long id) {
         try {

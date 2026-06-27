@@ -24,8 +24,8 @@ public class WebClientConfig {
                 registry.addMapping("/**")
                         .allowedOriginPatterns("*")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
-                        .allowedHeaders("*")            
-                        .allowCredentials(false);   
+                        .allowedHeaders("*")
+                        .allowCredentials(false);
             }
         };
     }

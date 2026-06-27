@@ -1,4 +1,4 @@
-package com.mansion_2.personajes.controller;
+package com.mansion_2.personajes.controller.V1;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +67,8 @@ public class PersonajesController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizarCategorias(@PathVariable Long id, @Valid @RequestBody Personajes datosNuevos) {
+    public ResponseEntity<?> actualizarCategorias(@PathVariable Long id,
+            @Valid @RequestBody PersonajesDTO datosNuevos) {
         try {
             PersonajesDTO actualizado = personajesService.actualizarPersonajes(id, datosNuevos);
             return ResponseEntity.ok(actualizado);

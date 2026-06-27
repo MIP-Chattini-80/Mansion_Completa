@@ -19,4 +19,5 @@ public class ObjetoModelAssembler implements RepresentationModelAssembler<Objeto
                 linkTo(methodOn(ObjetoController.class).obtenerPorId(objeto.getIdObjeto())).withSelfRel(),
                 linkTo(methodOn(ObjetoController.class).listarTodo()).withRel("objetos"));
     }
+
 }

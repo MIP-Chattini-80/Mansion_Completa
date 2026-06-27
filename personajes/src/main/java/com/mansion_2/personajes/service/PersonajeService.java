@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.mansion_2.personajes.dto.ObjetoExternoDTO;
 import com.mansion_2.personajes.dto.PersonajeDTO;
 import com.mansion_2.personajes.Model.Personaje;
 import com.mansion_2.personajes.repository.PersonajeRepository;
@@ -31,10 +32,17 @@ public class PersonajeService {
         dto.setNombre(personaje.getNombre());
         dto.setOrigen(personaje.getOrigen());
         dto.setTipoOrigen(personaje.getTipoOrigen());
-        
+
         if (personaje.getPersonajes() != null) {
             dto.setIdPersonajesPersonajes(personaje.getPersonajes().getId());
         }
+        if (personaje.getObjetoId() != null) {
+            ObjetoExternoDTO objetoExt = validaciones.obtenerObjeto(personaje.getObjetoId());
+            dto.setObjetoAsignado(objetoExt);
+        } else {
+            dto.setObjetoAsignado(validaciones.obtenerObjeto(null));
+        }
+
         return dto;
     }
 
@@ -45,7 +53,8 @@ public class PersonajeService {
     }
 
     public PersonajeDTO obtenerPorId(Long id) {
-        if (id == null) throw new IllegalArgumentException("El ID del personaje no puede ser nulo.");
+        if (id == null)
+            throw new IllegalArgumentException("El ID del personaje no puede ser nulo.");
         return personajeRepository.findById(id)
                 .map(this::mapToDTO)
                 .orElseThrow(() -> new RuntimeException("Personaje no encontrado con el ID: " + id));
@@ -103,7 +112,7 @@ public class PersonajeService {
         }
         if (validaciones.existeEnBaseDatos(id) == false) {
             throw new RuntimeException("No se puede editar. El personaje no existe con el ID: " + id);
-        }   
+        }
         Personaje existente = personajeRepository.findById(id).get();
         if (personaje.getNombre() != null) {
             if (personaje.getNombre().trim().isEmpty() == false) {
@@ -125,7 +134,8 @@ public class PersonajeService {
     }
 
     public void eliminarPersonaje(Long id) {
-        if (id == null) throw new IllegalArgumentException("El ID no puede ser nulo.");
+        if (id == null)
+            throw new IllegalArgumentException("El ID no puede ser nulo.");
         if (validaciones.existeEnBaseDatos(id) == false) {
             throw new RuntimeException("No se puede eliminar. El personaje no existe en la base de datos.");
         }

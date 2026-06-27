@@ -1,25 +1,16 @@
 package com.mansion_2.personajes.controller.V1;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.mansion_2.personajes.dto.PersonajeDTO;
-import com.mansion_2.personajes.Assemblers.PersonajeModelAssembler;
 import com.mansion_2.personajes.Model.Personaje;
 import com.mansion_2.personajes.service.PersonajeService;
 import jakarta.validation.Valid;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api/v1/personaje")
@@ -29,112 +20,82 @@ public class PersonajeController {
     @Autowired
     private PersonajeService personajeService;
 
-    @Autowired
-    private PersonajeModelAssembler assembler;
-
-    @GetMapping(produces = MediaTypes.HAL_JSON_VALUE)
-    public ResponseEntity<CollectionModel<EntityModel<PersonajeDTO>>> listarTodo() {
+    @GetMapping
+    public ResponseEntity<?> listarTodo() {
         try {
-            List<EntityModel<PersonajeDTO>> personajes = personajeService.listarTodo().stream()
-                    .map(assembler::toModel)
-                    .collect(Collectors.toList());
-
-            if (personajes.isEmpty()) {
-                return ResponseEntity.noContent().build();
-            }
-
-            return ResponseEntity.ok(CollectionModel.of(
-                    personajes,
-                    linkTo(methodOn(PersonajeController.class).listarTodo()).withSelfRel()));
+            List<PersonajeDTO> lista = personajeService.listarTodo();
+            return ResponseEntity.ok(lista);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
-    @GetMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
-    public ResponseEntity<EntityModel<PersonajeDTO>> obtenerPorId(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<?> obtenerPorId(@PathVariable Long id) {
         try {
             PersonajeDTO dto = personajeService.obtenerPorId(id);
-            if (dto == null) {
-                return ResponseEntity.notFound().build();
-            }
-            return ResponseEntity.ok(assembler.toModel(dto));
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok(dto);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
-    @GetMapping(value = "/nombre/{nombre}", produces = MediaTypes.HAL_JSON_VALUE)
-    public ResponseEntity<CollectionModel<EntityModel<PersonajeDTO>>> buscarPorNombre(@PathVariable String nombre) {
+    @GetMapping("/buscar-nombre")
+    public ResponseEntity<?> buscarPorNombre(@RequestParam String nombre) {
         try {
-            List<EntityModel<PersonajeDTO>> personajes = personajeService.buscarPorNombre(nombre).stream()
-                    .map(assembler::toModel)
-                    .collect(Collectors.toList());
-
-            if (personajes.isEmpty()) {
-                return ResponseEntity.noContent().build();
-            }
-
-            return ResponseEntity.ok(CollectionModel.of(
-                    personajes,
-                    linkTo(methodOn(PersonajeController.class).buscarPorNombre(nombre)).withSelfRel()));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            List<PersonajeDTO> resultados = personajeService.buscarPorNombre(nombre);
+            return ResponseEntity.ok(resultados);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
-    @GetMapping(value = "/tipo-origen/{tipoOrigen}", produces = MediaTypes.HAL_JSON_VALUE)
-    public ResponseEntity<CollectionModel<EntityModel<PersonajeDTO>>> buscarPorTipoOrigen(
-            @PathVariable String tipoOrigen) {
+    @GetMapping("/buscar-origen")
+    public ResponseEntity<?> buscarPorTipoOrigen(@RequestParam String tipoOrigen) {
         try {
-            List<EntityModel<EntityModel<PersonajeDTO>>> personajes = personajeService.buscarPorTipoOrigen(tipoOrigen)
-                    .stream()
-                    .map(assembler::toModel)
-                    .collect(Collectors.toList());
-
-            if (personajes.isEmpty()) {
-                return ResponseEntity.noContent().build();
-            }
-
-            return ResponseEntity.ok(CollectionModel.of(
-                    personajes,
-                    linkTo(methodOn(PersonajeController.class).buscarPorTipoOrigen(tipoOrigen)).withSelfRel()));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            List<PersonajeDTO> resultados = personajeService.buscarPorTipoOrigen(tipoOrigen);
+            return ResponseEntity.ok(resultados);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
-    @PostMapping(produces = MediaTypes.HAL_JSON_VALUE)
-    public ResponseEntity<EntityModel<PersonajeDTO>> guardarPersonaje(@Valid @RequestBody Personaje personaje) {
+    @PostMapping
+    public ResponseEntity<?> guardarPersonaje(@Valid @RequestBody Personaje personaje) {
         try {
             PersonajeDTO guardado = personajeService.guardarPersonaje(personaje);
-            return ResponseEntity
-                    .created(linkTo(methodOn(PersonajeController.class).obtenerPorId(guardado.getId())).toUri())
-                    .body(assembler.toModel(guardado));
+            return new ResponseEntity<>(guardado, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Error de integridad de datos al guardar el personaje.");
         }
     }
 
-    @PutMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
-    public ResponseEntity<EntityModel<PersonajeDTO>> actualizarPersonaje(@PathVariable Long id,
-            @Valid @RequestBody Personaje personaje) {
+    @PutMapping("/{id}")
+    public ResponseEntity<?> actualizarPersonaje(@PathVariable Long id, @Valid @RequestBody Personaje personaje) {
         try {
             PersonajeDTO actualizado = personajeService.actualizarPersonaje(id, personaje);
-            return ResponseEntity.ok(assembler.toModel(actualizado));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.ok(actualizado);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
-    @PatchMapping(value = "/{id}", produces = MediaTypes.HAL_JSON_VALUE)
-    public ResponseEntity<EntityModel<PersonajeDTO>> editarPersonaje(@PathVariable Long id,
-            @RequestBody PersonajeDTO personaje) {
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> editarPersonaje(@PathVariable Long id, @RequestBody PersonajeDTO personaje) {
         try {
             PersonajeDTO editado = personajeService.editarPersonaje(id, personaje);
-            return ResponseEntity.ok(assembler.toModel(editado));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.ok(editado);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
@@ -143,8 +104,10 @@ public class PersonajeController {
         try {
             personajeService.eliminarPersonaje(id);
             return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 

@@ -1,5 +1,6 @@
 package com.mansion_2.personajes.Model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -41,4 +42,8 @@ public class Personaje {
     @ManyToOne
     @JoinColumn(name = "personajes_id")
     private Personajes personajes;
+
+    @Column(name = "objeto_id")
+    private Long objetoId;
+
 }
