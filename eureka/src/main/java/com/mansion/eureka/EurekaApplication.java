@@ -1,4 +1,4 @@
-package com.jedis.eureka;
+package com.mansion.eureka;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

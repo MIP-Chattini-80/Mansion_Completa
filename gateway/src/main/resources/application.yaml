@@ -9,23 +9,53 @@ spring:
       server:
         webmvc:
           routes:
-            - id: jedi-service
-              uri: lb://jedis
+            # --- RUTAS DE NEGOCIO ---
+            - id: personajes-service
+              uri: lb://personajes
               predicates:
-                - Path=/api/v1/jedis/**, /jedis/api-docs/**
+                - Path=/personajes/api/**
+              filters:
+                - StripPrefix=1
 
-            - id: sables-service
-              uri: lb://sables
+            - id: jugador-progreso-service
+              uri: lb://jugador-progreso
               predicates:
-                - Path=/api/v1/sables/**, /sables/api-docs/**
+                - Path=/jugador-progreso/api/**
+              filters:
+                - StripPrefix=1
+
+            - id: habitaciones-service
+              uri: lb://habitaciones
+              predicates:
+                - Path=/habitaciones/api/**
+              filters:
+                - StripPrefix=1
+
+            # --- RUTAS DE DOCUMENTACIÓN (Corregidas y alineadas) ---
+            - id: personajes-swagger
+              uri: lb://personajes
+              predicates:
+                - Path=/personajes/v3/api-docs/**
+            
+            - id: jugador-progreso-swagger
+              uri: lb://jugador-progreso
+              predicates:
+                - Path=/jugador-progreso/v3/api-docs/**
+            
+            - id: habitaciones-swagger
+              uri: lb://habitaciones
+              predicates:
+                - Path=/habitaciones/v3/api-docs/**
 
 springdoc:
+  api-docs:
+    enabled: true
   swagger-ui:
     path: /swagger-ui/index.html
     urls:
-      - name: Microservicio Jedis
-        url: /jedis/api-docs
-      - name: Microservicio Sables
-        url: /sables/api-docs
-  api-docs:
-    enabled: true
+      - name: Microservicio Personajes
+        url: /personajes/v3/api-docs
+      - name: Microservicio Jugador Progreso
+        url: /jugador-progreso/v3/api-docs
+      - name: Microservicio Habitaciones
+        url: /habitaciones/v3/api-docs

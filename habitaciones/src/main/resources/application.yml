@@ -7,14 +7,14 @@ spring:
     baseline-on-migrate: 'true'
   datasource:
     username: root
-    url: jdbc:mysql://localhost:3306/db_mansion_boogaloo?createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/db_habitaciones?createDatabaseIfNotExist=true
     driverClassName: com.mysql.cj.jdbc.Driver
     password: ''
   application:
-    name: HabitacionesMC
+    name: habitaciones
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     show-sql: 'true'
 
 eureka:
