@@ -9,5 +9,8 @@ public class ProgresoDTO {
     private Long idJugador;
     private int nivelActual;
     private int puntosExperiencia;
-    
+
+    private String nombreHabitacionActual;
+    private String nombreUltimoPersonaje;
+
 }

@@ -23,7 +23,7 @@ public class Progreso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProgreso;
-    
+
     @OneToOne
     @JoinColumn(name = "id_jugador", nullable = false)
     private Jugador jugador;
@@ -36,5 +36,10 @@ public class Progreso {
     @Column(name = "puntos_experiencia")
     private int puntosExperiencia;
 
+    @Column(name = "habitacion_actual_id")
+    private Long habitacionActualId;
+
+    @Column(name = "ultimo_personaje_id")
+    private Long ultimoPersonajeId;
 
 }

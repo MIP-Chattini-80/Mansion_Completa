@@ -22,22 +22,9 @@ public class ProgresoService {
     @Autowired
     private ProgresoValidaciones progresoValidaciones;
 
-    private ProgresoDTO mapToDTO(Progreso progreso) {
-        if (progreso == null)
-            return null;
-        ProgresoDTO dto = new ProgresoDTO();
-        dto.setIdProgreso(progreso.getIdProgreso());
-        if (progreso.getJugador() != null) {
-            dto.setIdJugador(progreso.getJugador().getIdJugador());
-        }
-        dto.setNivelActual(progreso.getNivelActual());
-        dto.setPuntosExperiencia(progreso.getPuntosExperiencia());
-        return dto;
-    }
-
     public List<ProgresoDTO> listarTodos() {
         return progresoRepository.findAll().stream()
-                .map(this::mapToDTO)
+                .map(progresoValidaciones::convertirADTO)
                 .collect(Collectors.toList());
     }
 
@@ -45,15 +32,16 @@ public class ProgresoService {
         if (progresoValidaciones.existeEnBaseDatos(id) == false) {
             throw new RuntimeException("Progreso no encontrado con el ID: " + id);
         }
-        return mapToDTO(progresoRepository.findById(id).get());
+        Progreso progreso = progresoRepository.findById(id).get();
+        return progresoValidaciones.convertirADTO(progreso);
     }
 
-    public ProgresoDTO guardarProgreso(Progreso progreso) {
-        if (progresoValidaciones.validarNullSinNada(progreso) == false) {
-            throw new IllegalArgumentException("Los datos de progreso no son válidos o están incompletos.");
+    public ProgresoDTO guardar(Progreso nuevoProgreso) {
+        if (progresoValidaciones.validarNullSinNada(nuevoProgreso) == false) {
+            throw new IllegalArgumentException("Los datos del progreso no son válidos o están incompletos.");
         }
-        Progreso guardado = progresoRepository.save(progreso);
-        return mapToDTO(guardado);
+        Progreso guardado = progresoRepository.save(nuevoProgreso);
+        return progresoValidaciones.convertirADTO(guardado);
     }
 
     public ProgresoDTO actualizarProgreso(Long id, ProgresoDTO datosNuevos) {
@@ -69,7 +57,7 @@ public class ProgresoService {
         existente.setPuntosExperiencia(datosNuevos.getPuntosExperiencia());
 
         Progreso actualizado = progresoRepository.save(existente);
-        return mapToDTO(actualizado);
+        return progresoValidaciones.convertirADTO(actualizado);
     }
 
     public ProgresoDTO editarProgreso(Long id, ProgresoDTO datosNuevos) {
@@ -85,7 +73,7 @@ public class ProgresoService {
             existente.setPuntosExperiencia(datosNuevos.getPuntosExperiencia());
         }
         Progreso editado = progresoRepository.save(existente);
-        return mapToDTO(editado);
+        return progresoValidaciones.convertirADTO(editado);
     }
 
     public void eliminar(Long id) {
