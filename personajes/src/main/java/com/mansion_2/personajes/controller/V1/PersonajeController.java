@@ -12,7 +12,7 @@ import com.mansion_2.personajes.Model.Personaje;
 import com.mansion_2.personajes.service.PersonajeService;
 import jakarta.validation.Valid;
 
-@RestController
+@RestController("personajeControllerV1")
 @RequestMapping("/api/v1/personaje")
 @Validated
 public class PersonajeController {

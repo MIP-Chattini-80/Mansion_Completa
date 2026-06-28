@@ -30,7 +30,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController("personajeControllerV2")
-@RequestMapping("/api/v1/personaje")
+@RequestMapping("/api/v2/personaje")
 @Validated
 public class PersonajeController {
 

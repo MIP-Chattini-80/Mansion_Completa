@@ -36,7 +36,7 @@ public class ProgresoService {
         return progresoValidaciones.convertirADTO(progreso);
     }
 
-    public ProgresoDTO guardar(Progreso nuevoProgreso) {
+    public ProgresoDTO guardarProgreso(Progreso nuevoProgreso) {
         if (progresoValidaciones.validarNullSinNada(nuevoProgreso) == false) {
             throw new IllegalArgumentException("Los datos del progreso no son válidos o están incompletos.");
         }
