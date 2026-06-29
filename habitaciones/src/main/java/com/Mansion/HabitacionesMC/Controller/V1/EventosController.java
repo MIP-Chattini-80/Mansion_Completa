@@ -102,11 +102,18 @@ public class EventosController {
             eventosService.eliminar(id);
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); /* Error 400: enviaste la cosa mal loco */
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage()); /*
+                                                                                        * Error 400: enviaste la cosa
+                                                                                        * mal loco
+                                                                                        */
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage()); /* Error 404: no encontrado */
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage()); /* Error 500: tu wa es mala, esta cancion es mala! */
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage()); /*
+                                                                                                  * Error 500: tu wa es
+                                                                                                  * mala, esta cancion
+                                                                                                  * es mala!
+                                                                                                  */
         }
     }
 

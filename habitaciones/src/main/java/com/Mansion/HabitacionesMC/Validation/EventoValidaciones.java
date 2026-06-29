@@ -12,17 +12,17 @@ public class EventoValidaciones {
     @Autowired
     private EventoRepository eventoRepository;
 
-    public Boolean validarNullSinNada(Evento evento){
+    public Boolean validarNullSinNada(Evento evento) {
         if (evento == null) {
             return false;
         }
         if (evento.getTipoEvento() == null || evento.getTipoEvento().getIdEventos() == null) {
             return false;
         }
-        if(evento.getDescripcionEspecifica() == null || evento.getDescripcionEspecifica().trim().isEmpty()){
+        if (evento.getDescripcionEspecifica() == null || evento.getDescripcionEspecifica().trim().isEmpty()) {
             return false;
         }
-        if(evento.getHabitacion() == null){
+        if (evento.getHabitacion() == null) {
             return false;
         }
         return true;

@@ -26,7 +26,7 @@ public class PuertaValidaciones {
     }
 
     public Boolean existeEnBaseDatos(Long id) {
-        if (id == null || id <= 0) { /* verifica si el id es nulo o no existe*/
+        if (id == null || id <= 0) { /* verifica si el id es nulo o no existe */
             return false;
         }
         return puertaRepository.existsById(id); /* consulta final de que esté en la base de datos */
