@@ -12,7 +12,6 @@ import com.Mansion.HabitacionesMC.Model.Eventos;
 import com.Mansion.HabitacionesMC.Repository.EventosRepository;
 import com.Mansion.HabitacionesMC.Validation.EventosValidaciones;
 
-
 @Transactional
 @Service
 public class EventosService {
@@ -24,7 +23,8 @@ public class EventosService {
     private EventosValidaciones eventosValidaciones;
 
     private EventosDTO mapToDTO(Eventos modelo) {
-        if (modelo == null) return null;
+        if (modelo == null)
+            return null;
 
         EventosDTO dto = new EventosDTO();
         dto.setIdEventos(modelo.getIdEventos());
@@ -112,7 +112,8 @@ public class EventosService {
 
     public void eliminar(Long id) {
         if (eventosValidaciones.existeEnBaseDatos(id) == false) {
-            throw new RuntimeException("No se puede eliminar. La categoría de evento especificada no existe con el ID: " + id);
+            throw new RuntimeException(
+                    "No se puede eliminar. La categoría de evento especificada no existe con el ID: " + id);
         }
         eventosRepository.deleteById(id);
     }

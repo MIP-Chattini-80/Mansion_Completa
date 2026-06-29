@@ -19,7 +19,8 @@ public class HabitacionValidaciones {
         if (habitacion.getNombre() == null || habitacion.getNombre().trim().isEmpty()) {
             return false;
         }
-        if (habitacion.getDescripcion() == null || habitacion.getDescripcion().trim().length() < 10 || habitacion.getDescripcion().trim().length() > 255) {
+        if (habitacion.getDescripcion() == null || habitacion.getDescripcion().trim().length() < 10
+                || habitacion.getDescripcion().trim().length() > 255) {
             return false;
         }
         return true;

@@ -23,8 +23,9 @@ public class PuertaService {
     private PuertaValidaciones puertaValidaciones;
 
     private PuertaDTO mapToDTO(Puerta puerta) {
-        if (puerta == null) return null;
-        
+        if (puerta == null)
+            return null;
+
         PuertaDTO dto = new PuertaDTO();
         dto.setIdPuerta(puerta.getIdPuerta());
         dto.setEstaBloqueada(puerta.isEstaBloqueada());
@@ -49,7 +50,7 @@ public class PuertaService {
         }
         return puertaRepository.findById(id)
                 .map(this::mapToDTO)
-                .orElse(null); 
+                .orElse(null);
     }
 
     public PuertaDTO guardarPuerta(Puerta puerta) {
@@ -70,7 +71,12 @@ public class PuertaService {
         if (puertaValidaciones.validarNullSinNada(PuertaNueva) == false) { /* verifica si hay datos nuevos */
             throw new IllegalArgumentException("Las habitaciones de origen y destino son obligatorias.");
         }
-        if (PuertaNueva.getOrigen().getIdHabitacion().equals(PuertaNueva.getDestino().getIdHabitacion())) { /* verifica si ya existe la habitacion */
+        if (PuertaNueva.getOrigen().getIdHabitacion().equals(PuertaNueva.getDestino().getIdHabitacion())) { /*
+                                                                                                             * verifica
+                                                                                                             * si ya
+                                                                                                             * existe la
+                                                                                                             * habitacion
+                                                                                                             */
             throw new IllegalArgumentException("La habitación de origen y destino no pueden ser idénticas.");
         }
         Puerta puertaExistente = puertaRepository.findById(id).get();
@@ -83,7 +89,8 @@ public class PuertaService {
 
     public PuertaDTO editarPuerta(Long id, PuertaDTO PuertaNueva) {
         if (puertaValidaciones.existeEnBaseDatos(id) == false || PuertaNueva == null) {
-            throw new RuntimeException("No se puede editar. La puerta no existe o los datos son inválidos con el ID: " + id);
+            throw new RuntimeException(
+                    "No se puede editar. La puerta no existe o los datos son inválidos con el ID: " + id);
         }
         Puerta puerta = puertaRepository.findById(id).get();
         puerta.setEstaBloqueada(PuertaNueva.isEstaBloqueada());

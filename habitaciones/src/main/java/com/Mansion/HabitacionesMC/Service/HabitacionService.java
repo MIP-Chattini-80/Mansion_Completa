@@ -23,8 +23,9 @@ public class HabitacionService {
     private HabitacionValidaciones habitacionValidaciones;
 
     private HabitacionDTO mapToDTO(Habitacion habitacion) {
-        if (habitacion == null) return null;
-        
+        if (habitacion == null)
+            return null;
+
         HabitacionDTO dto = new HabitacionDTO();
         dto.setIdHabitacion(habitacion.getIdHabitacion());
         dto.setNombre(habitacion.getNombre());
@@ -72,7 +73,7 @@ public class HabitacionService {
         if (habitacion.getDescripcion() != null) {
             habitacion.setDescripcion(habitacion.getDescripcion().trim().replaceAll("\\s+", " "));
         }
-        
+
         Habitacion guardada = habitacionRepository.save(habitacion);
         return mapToDTO(guardada);
     }
@@ -81,7 +82,8 @@ public class HabitacionService {
         if (habitacionValidaciones.existeEnBaseDatos(id) == false) {
             throw new RuntimeException("No se puede actualizar. La habitación no existe. ");
         }
-        if (nuevaHabitacion == null || nuevaHabitacion.getNombre() == null || nuevaHabitacion.getNombre().trim().isEmpty()) {
+        if (nuevaHabitacion == null || nuevaHabitacion.getNombre() == null
+                || nuevaHabitacion.getNombre().trim().isEmpty()) {
             throw new IllegalArgumentException("El nombre no puede quedar vacío al actualizar.");
         }
         if (nuevaHabitacion.getDescripcion() == null || nuevaHabitacion.getDescripcion().trim().isEmpty()) {
@@ -92,7 +94,8 @@ public class HabitacionService {
         if (nuevoNombre.equalsIgnoreCase(habitacionExistente.getNombre()) == false) {
             Habitacion duplicado = habitacionRepository.findByNombreIgnoreCase(nuevoNombre);
             if (duplicado != null) {
-                throw new RuntimeException("No se puede actualizar. Ya existe otra habitación llamada: '" + nuevoNombre + "'");
+                throw new RuntimeException(
+                        "No se puede actualizar. Ya existe otra habitación llamada: '" + nuevoNombre + "'");
             }
         }
         habitacionExistente.setNombre(nuevoNombre);
@@ -108,7 +111,7 @@ public class HabitacionService {
         }
         Habitacion habitacion = habitacionRepository.findById(id).get();
         if (habita.getNombre() != null && habita.getNombre().trim().isEmpty() == false) {
-            String nombreClean = habita.getNombre().trim().replaceAll("\\s+", " ");  
+            String nombreClean = habita.getNombre().trim().replaceAll("\\s+", " ");
             if (nombreClean.equalsIgnoreCase(habitacion.getNombre()) == false) {
                 Habitacion duplicado = habitacionRepository.findByNombreIgnoreCase(nombreClean);
                 if (duplicado != null) {

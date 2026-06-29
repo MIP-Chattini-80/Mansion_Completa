@@ -12,7 +12,6 @@ import com.Mansion.HabitacionesMC.Model.Objeto;
 import com.Mansion.HabitacionesMC.Repository.ObjetoRepository;
 import com.Mansion.HabitacionesMC.Validation.ObjetoValidaciones;
 
-
 @Transactional
 @Service
 public class ObjetoService {
@@ -58,7 +57,8 @@ public class ObjetoService {
     }
 
     public ObjetoDTO obtenerPorId(Long id) {
-        if (id == null) throw new IllegalArgumentException("El ID del objeto no puede ser nulo.");
+        if (id == null)
+            throw new IllegalArgumentException("El ID del objeto no puede ser nulo.");
         return objetoRepository.findById(id)
                 .map(this::mapToDTO)
                 .orElseThrow(() -> new RuntimeException("Objeto físico no encontrado con el ID: " + id));
@@ -103,8 +103,11 @@ public class ObjetoService {
         }
         Objeto existente = objetoRepository.findById(id).get();
 
-        existente.setNombre(datosNuevos.getNombre() != null ? datosNuevos.getNombre().trim().replaceAll("\\s+", " ") : "");
-        existente.setDescripcion(datosNuevos.getDescripcion() != null ? datosNuevos.getDescripcion().trim().replaceAll("\\s+", " ") : "");
+        existente.setNombre(
+                datosNuevos.getNombre() != null ? datosNuevos.getNombre().trim().replaceAll("\\s+", " ") : "");
+        existente.setDescripcion(
+                datosNuevos.getDescripcion() != null ? datosNuevos.getDescripcion().trim().replaceAll("\\s+", " ")
+                        : "");
         existente.setTipoObjeto(datosNuevos.getTipoObjeto() != null ? datosNuevos.getTipoObjeto().trim() : "");
         existente.setValorBase(datosNuevos.getValorBase()); // Si es primitivo o Integer obligatorio
 
@@ -120,13 +123,14 @@ public class ObjetoService {
             throw new RuntimeException("No se puede editar. El objeto no existe con el ID: " + id);
         }
         Objeto existente = objetoRepository.findById(id).get();
-        mapearEntidad(existente, datosNuevos);      
+        mapearEntidad(existente, datosNuevos);
         Objeto actualizado = objetoRepository.save(existente);
         return mapToDTO(actualizado);
     }
 
     public void eliminarObjeto(Long id) {
-        if (id == null) throw new IllegalArgumentException("El ID no puede ser nulo.");
+        if (id == null)
+            throw new IllegalArgumentException("El ID no puede ser nulo.");
         if (validaciones.existeEnBaseDatos(id) == false) {
             throw new RuntimeException("No se puede eliminar. El objeto no existe en la base de datos.");
         }

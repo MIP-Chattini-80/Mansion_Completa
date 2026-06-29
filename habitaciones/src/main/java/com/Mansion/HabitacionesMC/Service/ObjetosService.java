@@ -23,8 +23,9 @@ public class ObjetosService {
     private ObjetosValidaciones objetosValidaciones;
 
     private ObjetosDTO mapToDTO(Objetos modelo) {
-        if (modelo == null) return null;
-        
+        if (modelo == null)
+            return null;
+
         ObjetosDTO dto = new ObjetosDTO();
         dto.setIdInstancia(modelo.getIdInstancia());
         if (modelo.getObjetoBase() != null) {
@@ -81,12 +82,12 @@ public class ObjetosService {
         if (objetosNuevos == null || objetosNuevos.getEstado() == null || objetosNuevos.getEstado().trim().isEmpty()) {
             throw new IllegalArgumentException("El estado es obligatorio para una actualización.");
         }
-        
+
         if (objetosNuevos.getCantidad() == null || objetosNuevos.getCantidad() < 0) {
             throw new IllegalArgumentException("La cantidad es requerida y no puede ser menor a 0.");
         }
         Objetos existente = objetosRepository.findById(id).get();
-        
+
         existente.setEstado(objetosNuevos.getEstado().trim().replaceAll("\\s+", " "));
         existente.setCantidad(objetosNuevos.getCantidad());
 
@@ -105,7 +106,7 @@ public class ObjetosService {
         if (datosNuevos.getCantidad() != null) {
             existente.setCantidad(datosNuevos.getCantidad());
         }
-        
+
         Objetos actualizado = objetosRepository.save(existente); /* aqui se guarda toda la edicion */
         return mapToDTO(actualizado);
     }
@@ -116,5 +117,5 @@ public class ObjetosService {
         }
         objetosRepository.deleteById(id);
     }
-    
+
 }

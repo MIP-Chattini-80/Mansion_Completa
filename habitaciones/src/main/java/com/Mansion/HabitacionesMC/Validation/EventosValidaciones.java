@@ -6,21 +6,20 @@ import org.springframework.stereotype.Component;
 import com.Mansion.HabitacionesMC.Model.Eventos;
 import com.Mansion.HabitacionesMC.Repository.EventosRepository;
 
-
 @Component
 public class EventosValidaciones {
 
     @Autowired
     private EventosRepository eventosRepository;
 
-    public Boolean validarNullSinNada(Eventos eventos){
+    public Boolean validarNullSinNada(Eventos eventos) {
         if (eventos == null) {
             return false;
         }
         if (eventos.getCategoria() == null || eventos.getCategoria().trim().isEmpty()) {
             return false;
         }
-        if(eventos.getExperienciaBase() <= 0){
+        if (eventos.getExperienciaBase() <= 0) {
             return false;
         }
         return true;
