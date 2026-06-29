@@ -29,6 +29,10 @@ public class Jugador {
     @Column(name = "username", unique = true, nullable = false)
     private String username;
 
+    // Campo nuevo: nombre del jugador dentro del juego (se asigna durante la partida)
+    @Column(name = "nombre_jugador")
+    private String nombreJugador;
+
     @NotBlank(message = "Contraseña obligatoria")
     @Column(name = "password", nullable = false)
     private String password;

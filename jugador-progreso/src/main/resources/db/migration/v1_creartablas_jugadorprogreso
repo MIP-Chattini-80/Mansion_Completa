@@ -6,6 +6,9 @@ CREATE TABLE jugador (
     email VARCHAR(255) NOT NULL
 );
 
+ALTER TABLE jugador
+    ADD COLUMN nombre_jugador VARCHAR(100) NULL;
+
 CREATE TABLE progreso (
     id_progreso INT AUTO_INCREMENT PRIMARY KEY,
     id_jugador INT NOT NULL UNIQUE,
