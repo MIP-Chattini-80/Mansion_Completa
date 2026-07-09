@@ -1,0 +1,61 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+            # --- RUTAS DE NEGOCIO ---
+            - id: personajes-service
+              uri: lb://personajes
+              predicates:
+                - Path=/personajes/api/**
+              filters:
+                - StripPrefix=1
+
+            - id: jugador-progreso-service
+              uri: lb://jugador-progreso
+              predicates:
+                - Path=/jugador-progreso/api/**
+              filters:
+                - StripPrefix=1
+
+            - id: habitaciones-service
+              uri: lb://habitaciones
+              predicates:
+                - Path=/habitaciones/api/**
+              filters:
+                - StripPrefix=1
+
+            # --- RUTAS DE DOCUMENTACIÓN (Corregidas y alineadas) ---
+            - id: personajes-swagger
+              uri: lb://personajes
+              predicates:
+                - Path=/personajes/v3/api-docs/**
+            
+            - id: jugador-progreso-swagger
+              uri: lb://jugador-progreso
+              predicates:
+                - Path=/jugador-progreso/v3/api-docs/**
+            
+            - id: habitaciones-swagger
+              uri: lb://habitaciones
+              predicates:
+                - Path=/habitaciones/v3/api-docs/**
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui/index.html
+    urls:
+      - name: Microservicio Personajes
+        url: /personajes/v3/api-docs
+      - name: Microservicio Jugador Progreso
+        url: /jugador-progreso/v3/api-docs
+      - name: Microservicio Habitaciones
+        url: /habitaciones/v3/api-docs
