@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.Mansion.HabitacionesMC.DTO.PuertaDTO;
+import com.Mansion.HabitacionesMC.Model.Habitacion;
 import com.Mansion.HabitacionesMC.Model.Puerta;
+import com.Mansion.HabitacionesMC.Repository.HabitacionRepository;
 import com.Mansion.HabitacionesMC.Repository.PuertaRepository;
 import com.Mansion.HabitacionesMC.Validation.PuertaValidaciones;
 
@@ -20,11 +22,15 @@ public class PuertaService {
     private PuertaRepository puertaRepository;
 
     @Autowired
+    private HabitacionRepository habitacionRepository;
+
+    @Autowired
     private PuertaValidaciones puertaValidaciones;
 
     private PuertaDTO mapToDTO(Puerta puerta) {
-        if (puerta == null) return null;
-        
+        if (puerta == null)
+            return null;
+
         PuertaDTO dto = new PuertaDTO();
         dto.setIdPuerta(puerta.getIdPuerta());
         dto.setEstaBloqueada(puerta.isEstaBloqueada());
@@ -49,7 +55,7 @@ public class PuertaService {
         }
         return puertaRepository.findById(id)
                 .map(this::mapToDTO)
-                .orElse(null); 
+                .orElse(null);
     }
 
     public PuertaDTO guardarPuerta(Puerta puerta) {
@@ -63,27 +69,45 @@ public class PuertaService {
         return mapToDTO(guardada);
     }
 
-    public PuertaDTO actualizarPuerta(Long id, Puerta PuertaNueva) {
+    public PuertaDTO actualizarPuerta(Long id, PuertaDTO puertaNueva) {
         if (puertaValidaciones.existeEnBaseDatos(id) == false) { /* verifica la existencia de los datos */
             throw new RuntimeException("No se puede actualizar. La puerta no existe. ");
         }
-        if (puertaValidaciones.validarNullSinNada(PuertaNueva) == false) { /* verifica si hay datos nuevos */
+        if (puertaNueva == null || puertaNueva.getIdHabitacionOrigen() == null
+                || puertaNueva.getIdHabitacionDestino() == null) { /* verifica si hay datos nuevos */
             throw new IllegalArgumentException("Las habitaciones de origen y destino son obligatorias.");
         }
-        if (PuertaNueva.getOrigen().getIdHabitacion().equals(PuertaNueva.getDestino().getIdHabitacion())) { /* verifica si ya existe la habitacion */
+        if (puertaNueva.getIdHabitacionOrigen().equals(puertaNueva.getIdHabitacionDestino())) { /*
+                                                                                                 * verifica si ya existe
+                                                                                                 * la habitacion
+                                                                                                 */
             throw new IllegalArgumentException("La habitación de origen y destino no pueden ser idénticas.");
         }
+        Habitacion origen = habitacionRepository.findById(puertaNueva.getIdHabitacionOrigen()) /*
+                                                                                                * aqui usamos
+                                                                                                * hbitacionrepository
+                                                                                                * inyectado con
+                                                                                                * autowired
+                                                                                                * por que tanto
+                                                                                                * habitacion como puerta
+                                                                                                * estan conectados
+                                                                                                */
+                .orElseThrow(() -> new RuntimeException("La habitación de origen indicada no existe."));
+        Habitacion destino = habitacionRepository.findById(puertaNueva.getIdHabitacionDestino())
+                .orElseThrow(() -> new RuntimeException("La habitación de destino indicada no existe."));
+
         Puerta puertaExistente = puertaRepository.findById(id).get();
-        puertaExistente.setOrigen(PuertaNueva.getOrigen());
-        puertaExistente.setDestino(PuertaNueva.getDestino());
-        puertaExistente.setEstaBloqueada(PuertaNueva.isEstaBloqueada());
+        puertaExistente.setOrigen(origen);
+        puertaExistente.setDestino(destino);
+        puertaExistente.setEstaBloqueada(puertaNueva.isEstaBloqueada());
         Puerta actualizada = puertaRepository.save(puertaExistente);
         return mapToDTO(actualizada);
     }
 
     public PuertaDTO editarPuerta(Long id, PuertaDTO PuertaNueva) {
         if (puertaValidaciones.existeEnBaseDatos(id) == false || PuertaNueva == null) {
-            throw new RuntimeException("No se puede editar. La puerta no existe o los datos son inválidos con el ID: " + id);
+            throw new RuntimeException(
+                    "No se puede editar. La puerta no existe o los datos son inválidos con el ID: " + id);
         }
         Puerta puerta = puertaRepository.findById(id).get();
         puerta.setEstaBloqueada(PuertaNueva.isEstaBloqueada());
