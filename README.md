@@ -21,3 +21,5 @@ V6 - La creación de un archivo .bat que nos ayudará a activar todo el programa
 v7 - se agregaron nuevas cosas del lore y dialogos, para que la historia fluya y se agregaron más cosas para poder guardar nuestra partida desde donde quedó.
 
 v8 - se modificaron algunos aprametros del gateway para que se pudieran ver los datos en el navegador.
+
+V9 - Se agregaron las pruebas unitarias de los 3 microservicios, excepto por 3 que todavia no se terminaban
