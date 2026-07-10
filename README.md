@@ -1,9 +1,21 @@
 README DEL PROJECTO "MANSION DE LOS ECOS"
 
-Este readme es para mostrar los pasos que hemos hecho para crear nuestro poyecto del juego "Mansion de los Ecos", el cual nos ha dado varios dolores de cabeza, pero que al menos lo avanzamos
-aun buen puerto, si es que lo logramos, ehe. (Ehe te nandayo!!)
+Integrantes grupo: Andrés Rojas, Roberto Lavergne, Gerian Buenano
 
-Bitácora de rojas: estoy sufriendo, pero logramos avanzar.
+Microservicios:
+
+- Jugador-Progreso
+- Personajes
+- Habitaciones
+
+Enlaces a:
+
+- Eureka: http://localhost:8761/
+- Swagger: http://localhost:8080/swagger-ui/index.html (si no funciona, llamen a dios)
+
+Este readme es para mostrar los pasos que hemos hecho para crear nuestro poyecto del juego "Mansion de los Ecos", el cual nos ha dado varios dolores de cabeza, pero que al menos lo avanzamos a un buen puerto, si es que lo logramos, ehe. (Ehe te nandayo!!)
+
+Bitácora de Rojas: estoy sufriendo, pero logré poner el proyecto en docker.
 
 V1 - El primer Commit subido fue de la creación de los 3 microservicios principales habitaciones (Mansion-Electric-boogaloo), personajes y jugador-progreso, previo al siguiente paso.
 
