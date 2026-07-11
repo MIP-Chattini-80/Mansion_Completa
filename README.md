@@ -34,6 +34,6 @@ v7 - se agregaron nuevas cosas del lore y dialogos, para que la historia fluya y
 
 v8 - se modificaron algunos aprametros del gateway para que se pudieran ver los datos en el navegador.
 
-V9 - Se agregaron las pruebas unitarias de los 3 microservicios, probados y funcionando perfecto.
+V9 - Se agregaron las pruebas unitarias de los 3 microservicios, probados y funcionando perfecto. (feature-PRUEBAS-UNITARIAS)
 
-v10 - El proyecto fue pasado a Docker exitosamente, creandose el cotnainer principal que tiene a lo de cada microservicio.
+v10 - El proyecto fue pasado a Docker exitosamente, creandose el cotnainer principal que tiene a lo de cada microservicio. (feature-DOCKER)
